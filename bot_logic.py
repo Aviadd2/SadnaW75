@@ -116,12 +116,14 @@ class Bot:
     def process_message(self, user_id, message):
         """Process an incoming message from a user."""
         if user_id not in ['972523265851', '972544446986',
-                           '972525058586', '972528722464']:  # Todo: remove, this is to restrict to specific users for testing
+                           '972525058586', '972528722464']:
             return
 
         if self.check_if_restart(user_id, message):
             return  # If the user wants to restart, stop further processing
 
+
+        #checking if the user is in an ongoing order process or a new inquiry
         if user_id not in self.user_orders:
             self.user_orders[user_id] = {}
             self.ask_for_inquiry_or_order(user_id)  # First question: Inquire or new order
@@ -214,7 +216,8 @@ class Bot:
         self.last_timestamp = get_time() - 60
 
         while True:
-            seen_conversations = ['120363309946680980@g.us']
+            seen_conversations = []
+            # in case we want to filter specific conversations we can do it using seen_conversation array
             messages = fetch_messages(self.last_timestamp)
             for msg in messages.get('messages', []):
                 chat_id = msg['chat_id']
@@ -226,7 +229,7 @@ class Bot:
             time.sleep(CHECK_INTERVAL)
 
     def handle_last_message_in_chat(self, msg):
-        """Handle the last message in a chat."""
+        """Handle the last message in a chat. checking if message is not from me or last message is text only"""
         if msg['from_me'] is False and msg.get('text'):
             message = msg['text']['body'].strip()
             user_id = msg['from']
