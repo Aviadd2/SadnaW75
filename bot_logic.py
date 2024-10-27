@@ -231,7 +231,6 @@ class Bot:
             message = msg['text']['body'].strip()
             user_id = msg['from']
             self.process_message(user_id, message)
-
     def run_message_checker(self):
         """Start a background thread to check messages."""
         Thread(target=self.check_messages).start()
