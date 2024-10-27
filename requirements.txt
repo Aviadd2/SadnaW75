@@ -1,0 +1,2 @@
+requests==2.27.1
+simple-salesforce==1.12.4
